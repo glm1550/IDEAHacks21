@@ -1,0 +1,336 @@
+<!--Grace Ma, Jonathan Lam 2021 IDEA Hacks-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        * {
+            font-family:Verdana;
+            color:black;
+            text-align: center;
+        }
+
+        /* SLIDER ANIMATION: NOT USED IN FINAL PROJECT AS OF 1/17/21
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 180px;
+            height: 70px;
+        }
+
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: lightgreen;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 55px;
+            width: 90px;
+            left: 8px;
+            bottom: 7px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: tomato;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(73px);
+        }
+
+        .slider:after
+        {
+            content:'FREE';
+            transition: .4s;
+            color: green;
+            display: block;
+            position:relative;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 30%;
+            font-size: 20px;
+        }
+
+        input:checked + .slider:after
+        {  
+            content:'BUSY';
+            transition: .4s;
+            color:red;
+            left: 70%;
+        }
+
+        */
+
+        table,th,td{
+            border-collapse:collapse;
+            align-self: center;
+            text-align: left;
+            vertical-align: top;
+            padding:15px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        body{
+            background-image: url('desktop.png');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        #paper {
+            width: 600px;
+            height: 700px;
+            position: relative;
+            margin: 20px auto;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: white;
+            box-shadow: 0px 0px 2px 0px #888;
+        }
+
+        #pattern {
+            height: 100%;
+            background-image: repeating-linear-gradient(white 0px, white 30px, tan 31px);
+        }
+
+        #content {
+            padding-top: 1px;
+            padding-left: 56px;
+            padding-right: 16px;
+            line-height: 25px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 19px;
+            letter-spacing: 1px;
+            word-spacing: 5px;
+        }
+
+        .button{
+            display:inline-block;
+            padding:0.35em 1.2em;
+            border: 1px solid lightgreen;
+            box-sizing: border-box;
+            text-decoration:none;
+            font-weight:300;
+            color:white;
+            background-color: lightgreen;
+            transition: all 0.2s;
+            margin-left: 20px;
+        }    
+
+        .button:hover{
+            background-color:white;
+            color: lightgreen;
+        }
+        @media all and (max-width:30em){
+            button1{
+            display:block;
+            margin:0.4em auto;
+            }
+        }
+        
+        form  { display: table;      }
+        p     { display: table-row;  }
+        label { display: table-cell; text-align: left; padding-left: 20px; margin-bottom: 30px;}
+        input { display: table-cell; margin-left: 20px; margin-bottom: 7px;}
+
+        #submit{
+            margin-right: 60px;
+        }
+
+        
+
+    </style>
+
+    <!--DISPLAY ADD ON FORM ONLY WHEN BUTTON IS PRESSED-->
+    <script type="text/javascript">
+        function showForm() {
+            document.getElementById('add').style = "display:none"
+            document.getElementById('myForm').style = "display";
+            document.getElementById('submit').style = "display";
+        }
+    </script>
+
+    <!--LINKING TO THE API-->
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+    </script>
+    <script>
+        //writing data:
+        function SubForm (){
+            $.ajax({
+                url:"https://api.apispreadsheets.com/data/6638/",
+                type:"post",
+                data:$("#myForm").serializeArray(),
+                success: function(){
+                    //alert("Event Submitted!")
+                    location.reload()
+                },
+                error: function(){
+                    alert("There was an error :(")
+                }
+            });
+            document.getElementById("myForm").reset();
+    }
+    </script>
+
+    <title>IDEA Hacks21</title>
+    <meta charset= "utf-8">
+    <meta name = "viewprt" content= "width=device-width, initial-scale=1">
+</head>
+<body>
+ 
+
+    <br></br>
+
+    <!--TODO: TOGGLE SLIDER
+    <h2>My Status</h2>
+                <label class="switch">
+                    <input type="checkbox">
+                    <div class="slider"></div>
+                </label>
+
+    <br></br>
+
+    -->
+
+    <!--PLANNER SECTION-->
+    <div id="paper">
+        <div id="pattern">
+            <div id="content">
+
+                <h3>
+                    My Daily Planner
+                </h3>
+
+                <table align = "center"
+                    id="table"> 
+                </table> 
+                
+                <br></br>
+
+                <!--ADD AN EVENT-->
+
+                <a class ="button" id = "add" onclick="showForm()">Add an Event!</a>
+                <form id="myForm" style="display: none;">
+                    <p>
+                        <label>Event</label>
+                        <input name="Event" />
+                    </p>
+                    <p>
+                        <label>Start Time</label>
+                        <input name="Start Time" />
+                    </p>
+                    <p>
+                        <label>End Time</label>
+                        <input name="End Time" />
+                    </p>
+                    <p>
+                        <label>Message</label>
+                        <input name="my Message" />
+                    </p>
+                </form>
+
+                <a class= "button" id = "submit" style= "display:none" onclick="SubForm()">
+                    Submit!
+                </a>
+            </div>
+        </div>
+    </div>
+    <script> 
+        //reading data:
+        window.onload = function(){
+            constructTable('#table');
+        }
+
+        var el_up = document.getElementById("GFG_UP"); 
+
+        /*
+        PULLS DATA FROM API, BASED ON GEEKSFORGEEKS
+        */
+              
+        function constructTable(selector) { 
+
+            var table;
+            fetch("https://api.apispreadsheets.com/data/6638/").then(res=>{
+            if (res.status === 200){
+                // SUCCESS
+                res.json().then(data=>{
+                    const yourData = data;
+                    var list = yourData['data'];
+
+                    
+                    // Getting the all column names 
+                    var cols = Headers(list, selector);  
+                    //var cols = ["Event Name", "Start Time", "End Time"]; 
+                    
+                    // Traversing the JSON data 
+                    for (var i = 0; i < list.length; i++) { 
+                        var row = $('<tr/>');    
+                        for (var colIndex = 0; colIndex < cols.length; colIndex++) 
+                        { 
+                            var val = list[i][cols[colIndex]]; 
+                                
+                            // If there is any key, which is matching 
+                            // with the column name 
+                            if (val == null) val = "";   
+                                row.append($('<td/>').html(val)); 
+                        } 
+                            
+                        // Adding each row to the table 
+                        $(selector).append(row); 
+                    } 
+                }).catch(err => console.log(err))
+            }
+            else{}
+            })
+              
+        } 
+          
+        function Headers(list, selector) { 
+            var columns = [];
+            var header = $('<tr/>');
+            //var header2 = ["Event Name", "Start Time", "End Time"]; 
+              
+            for (var i = 0; i < list.length; i++) { 
+                var row = list[i]; 
+                  
+                for (var k in row) { 
+                    if ($.inArray(k, columns) == -1) { 
+                        columns.push(k); 
+                          
+                        // Creating the header 
+                       header.append($('<th/>').html(k)); 
+                    } 
+                } 
+            }
+            
+            console.log(header);
+            // Appending the header to the table 
+            $(selector).append(header); 
+                return columns; 
+        }        
+    </script>
+    <br></br>
+
+
+
+</body>
+</html>
